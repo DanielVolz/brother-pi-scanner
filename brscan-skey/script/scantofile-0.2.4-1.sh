@@ -35,6 +35,10 @@ scriptname=$(basename "$0")
 # $0 refers to the script name
 basedir=$(readlink -f "$0" | xargs dirname)
 
+# TMP=$(mktemp -d)
+# cd $TMP
+
+
 # change to directory of script
 cd ${basedir}
 echo "basedir = $basedir" 
