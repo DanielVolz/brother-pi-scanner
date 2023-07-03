@@ -22,7 +22,14 @@ ENV NAME="Scanner"
 ENV MODEL="MFC-5490CN"
 ENV IPADDRESS="192.168.0.172"
 ENV USERNAME="pi-scanner"
+ENV TZ="Europe/Berlin"
+ENV DEBIAN_FRONTEND="noninteractive"
 
+# install and configure the timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get -yq install tzdata
+
+#needed ports for brscan-skey
 EXPOSE 54925
 EXPOSE 54921
 
