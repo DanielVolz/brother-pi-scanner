@@ -8,7 +8,7 @@ Icon
 
 
 # Thumbnails
-._*
+**/._*
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
@@ -27,7 +27,7 @@ Temporary Items
 .apdisk
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+brscan-skey/script/__pycache__/
 *.py[cod]
 *$py.class
 
