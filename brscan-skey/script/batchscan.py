@@ -405,8 +405,8 @@ else:  # if not (double sided and manual double scanning) simply run single side
     [out, err, processhandle] = scanutils.run_scancommand(
         args.device_name,
         outputfile,
-        width=args.width,
-        height=args.height,
+        # width=args.width,
+        # height=args.height,
         logfile=logfile,
         debug=debug,
         mode=args.mode,
