@@ -136,5 +136,12 @@ if [ -s $output_file ]; then
     mv $output_file_compressed $SAVETO
     rm $output_file_compressed
     rm $output_file
+    curl \
+        -u pi:m5QtrF8hY \
+        -d "PDF $date created successfully!" \
+        -H "Title: Scanning done!" \
+        -H "Priority: low" \
+        -H "Tags: scanner, pdf" \
+        https://ntfy.danielvolz.org/scanner
     # chown arjun:szhao $output_file_compressed
 fi
