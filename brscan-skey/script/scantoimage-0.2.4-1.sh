@@ -38,22 +38,30 @@ if [[ -r "$cfgfile" ]]; then
     env
 fi
 
+# # SAVETO DIRECTORY
+# if [[ -z "$SAVETO" ]];  then
+#     SAVETO=${HOME}'/brscan/photos'
+# else
+#     SAVETO=${SAVETO}'/photos'
+# fi
+
 # SAVETO DIRECTORY
-if [[ -z "$SAVETO" ]];  then
-    SAVETO=${HOME}'/brscan/photos'
-else
-    SAVETO=${SAVETO}'/photos'
-fi
+
+TMP_SAVETO=${HOME}'/brscan/photos'
+
+SAVETO=${SAVETO}'/photos'
+
 
 mkdir -p $SAVETO
+mkdir -p $TMP_SAVETO
 
 if [[ -z $LOGDIR ]]; then
     # if LOGDIR is not set, choose a default
     mkdir -p ${HOME}/brscan
-    logfile=${HOME}"/brscan/$scriptname.log"
+    logfile=${HOME}"/brscan/$(date +%Y-%m-%d-%H-%M-%S)_photo_scan.log"
 else
     mkdir -p $LOGDIR
-    logfile=${LOGDIR}"/$scriptname.log"
+    logfile=${LOGDIR}"/$(date +%Y-%m-%d-%H-%M-%S)_photo_scan.log"
 fi
 touch ${logfile}
 
@@ -84,7 +92,7 @@ else
     sleep  0.1
 fi
 # output_file=$SAVETO + "/brscan_photo_" + `date +%Y-%m-%d-%H-%M-%S`".pnm
-output_file="$SAVETO/brscan_photo_$(date +%Y-%m-%d-%H-%M-%S).pnm"
+output_file="$TMP_SAVETO/brscan_photo_$(date +%Y-%m-%d-%H-%M-%S).pnm"
 
 #echo "scan from $1($device) to $output_file"
 
@@ -125,5 +133,8 @@ if [ -s $output_file ]; then
     echo convert -trim -bordercolor White -border 20x10 +repage -quality 95 -density "$resolution" $output_file "$output_file_compressed" 
     echo convert -trim -quality 95 -density "$resolution" $output_file "$output_file_compressed" >> $logfile
     echo convert -trim -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" | bash
+    mv $output_file_compressed $SAVETO
+    rm $output_file_compressed
+    rm $output_file
     # chown arjun:szhao $output_file_compressed
 fi
