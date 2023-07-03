@@ -458,11 +458,10 @@ else:  # if not (double sided and manual double scanning) simply run single side
 
             # find newly converted files
             # convertedfiles = filelist('ls ' + args.outputdir + '/' + args.prefix + '-' + str(int(args.timenow)) + '-part-*.pdf')
-
+            args.outputdir = "/scans"
             # make a filelist and output filename to pdftk
             compiled_pdf_filename = (
-                # args.outputdir
-                +"/scans"
+                args.outputdir
                 + "/"
                 + args.prefix
                 + "-"
