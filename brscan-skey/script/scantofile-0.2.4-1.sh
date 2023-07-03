@@ -55,11 +55,7 @@ fi
 
 
 # SAVETO DIRECTORY
-if [[ -z "$SAVETO" ]];  then
-    SAVETO=${HOME}'/brscan/documents'
-else
-    SAVETO=${SAVETO}'/documents/'
-fi
+SAVETO=${HOME}'/brscan/docs'
 
 mkdir -p $SAVETO
 

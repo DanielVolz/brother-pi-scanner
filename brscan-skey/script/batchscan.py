@@ -470,7 +470,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
                 + str(int(time.time()))
                 + ".pdf"
             )
-
+            compiled_pdf_filename = "/scans/new_pdf.pdf"
             scanutils.run_pdftk(
                 converted_files, compiled_pdf_filename, debug=debug, logfile=logfile
             )
