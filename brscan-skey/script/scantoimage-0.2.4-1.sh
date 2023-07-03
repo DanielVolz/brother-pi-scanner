@@ -33,11 +33,11 @@ mode='"24Bit Color"'
 #mode='"Black & White"'
 
 # change to directory of script
-cd ${basedir}
+# cd ${basedir}
 echo "basedir = $basedir" 
 
 # ugly hack that makes environment variables set available
-cfgfile=$(ls ../brscan-skey.config)
+cfgfile="/opt/brother/scanner/brscan-skey/brscan-skey.config"
 echo "cfgfile = $cfgfile"
 if [[ -r "$cfgfile" ]]; then
     echo "Found cfgfile"
