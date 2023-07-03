@@ -19,26 +19,18 @@ resolution=200
 #width=160
 compress_format="png"
 
-function Usage() {
-    echo -e "Usage:"
-    echo -e "\t scantoimage.sh <devicename>\n"
-    echo -e "The devicename is optional."
-    echo -e "Check the source for options. Will write a png file in a default directory after scanning."
-    echo -e "Heights and width can be specified in the script. So can compression format, resolution."
-}
-
-
 # set color to full color or 24 bit. 
 mode='"24Bit Color"'
 #mode='"Black & White"'
 
 # change to directory of script
 # cd ${basedir}
-echo "basedir = $basedir" 
+# echo "basedir = $basedir" 
 
 # ugly hack that makes environment variables set available
 cfgfile="/opt/brother/scanner/brscan-skey/brscan-skey.config"
 echo "cfgfile = $cfgfile"
+
 if [[ -r "$cfgfile" ]]; then
     echo "Found cfgfile"
     source "$cfgfile"
@@ -46,10 +38,9 @@ if [[ -r "$cfgfile" ]]; then
     env
 fi
 
-
 # SAVETO DIRECTORY
 if [[ -z "$SAVETO" ]];  then
-    SAVETO=${HOME}'/brscan/documents'
+    SAVETO=${HOME}'/brscan/photos'
 else
     SAVETO=${SAVETO}'/photos'
 fi
