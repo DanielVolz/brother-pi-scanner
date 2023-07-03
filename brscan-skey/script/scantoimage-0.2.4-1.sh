@@ -51,7 +51,7 @@ fi
 if [[ -z "$SAVETO" ]];  then
     SAVETO=${HOME}'/brscan/documents'
 else
-    SAVETO=${SAVETO}'/photos/'
+    SAVETO=${SAVETO}'/photos'
 fi
 
 mkdir -p $SAVETO
