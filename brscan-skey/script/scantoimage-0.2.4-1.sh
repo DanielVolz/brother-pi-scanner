@@ -134,11 +134,10 @@ if [ -s $output_file ]; then
     echo convert -trim -quality 95 -density "$resolution" $output_file "$output_file_compressed" >> $logfile
     echo convert -trim -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" | bash
     mv $output_file_compressed $SAVETO
-    rm $output_file_compressed
     rm $output_file
     curl \
         -u pi:m5QtrF8hY \
-        -d "PDF $date created successfully!" \
+        -d "Single document scanned successfully!" \
         -H "Title: Scanning done!" \
         -H "Priority: low" \
         -H "Tags: scanner, pdf" \
