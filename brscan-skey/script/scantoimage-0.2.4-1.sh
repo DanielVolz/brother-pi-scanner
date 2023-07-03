@@ -127,12 +127,12 @@ fi
 if [ -s $output_file ]; then
     echo  $output_file is created.
     # change ownership so arjun and szhao have access
-    chown arjun:szhao $output_file
+    # chown arjun:szhao $output_file
 
     # Should convert to jpg and delete duplicates
     output_file_compressed=$(dirname $output_file)"/"$(basename $output_file .pnm)".$compress_format"
     echo convert -trim -bordercolor White -border 20x10 +repage -quality 95 -density "$resolution" $output_file "$output_file_compressed" 
     echo convert -trim -quality 95 -density "$resolution" $output_file "$output_file_compressed" >> $logfile
     echo convert -trim -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" | bash
-    chown arjun:szhao $output_file_compressed
+    # chown arjun:szhao $output_file_compressed
 fi
