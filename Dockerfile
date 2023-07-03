@@ -18,7 +18,7 @@ RUN ln -vs /usr/lib64/sane/libsane-brother*.so* /usr/lib/x86_64-linux-gnu/sane
 
 ADD files/add_scanner.sh /opt/brother/add_scanner.sh
 
-ENV NAME="Scanner"
+ENV NAME="pi-scanner"
 ENV MODEL="MFC-5490CN"
 ENV IPADDRESS="192.168.0.172"
 ENV USERNAME="pi-scanner"
