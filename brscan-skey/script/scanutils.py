@@ -291,7 +291,7 @@ def convert_to_pdf(
     logfile=None,
     compress=True,
     compress_format="png",
-    img2pdfopts=["--pagesize", "Letter", "--border", "0in:0in"],
+    img2pdfopts=["--pagesize", "A4", "--border", "0in:0in"],
 ):
     """
     Requires img2pdf and convert from imagemagick

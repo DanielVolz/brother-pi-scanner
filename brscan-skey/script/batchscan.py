@@ -88,16 +88,16 @@ def parse_arguments():
         "--height",
         nargs="?",
         action="store",
-        default="290",
-        const="290",
+        default="297",
+        const="297",
         help="scanned page height. default letter paper height in mm",
     )
     parser.add_argument(
         "--width",
         nargs="?",
         action="store",
-        default="215.88",
-        const="215.88",
+        default="210",
+        const="210",
         help="scanned page width. similar to letter paper in mm",
     )
     parser.add_argument("--mode", nargs="?", action="store", default=None, const=None)
