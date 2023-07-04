@@ -39,7 +39,7 @@ def send_ntfy_notification(username, password, message, title, priority, tags):
         "-u",
         f"{username}:{password}",
         "-d",
-        message,
+        str(message),
         "-H",
         f"Title: {title}",
         "-H",
