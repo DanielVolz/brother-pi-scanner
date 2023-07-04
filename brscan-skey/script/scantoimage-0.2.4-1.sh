@@ -39,12 +39,14 @@ if [[ -r "$cfgfile" ]]; then
 fi
 
 # SAVETO DIRECTORY
+TMP_SAVETO=${HOME}'/brscan/single'
+mkdir -p "$TMP_SAVETO"
+
 if [[ -z "$SAVETO" ]];  then
     SAVETO=${HOME}'/brscan/single'
-    mkdir -p "$SAVETO"
 else
     SAVETO=${SAVETO}'/single'
-    mkdir -p "$TMP_SAVETO"
+    mkdir -p "$SAVETO"
 fi
 
 if [[ -z $LOGDIR ]]; then
