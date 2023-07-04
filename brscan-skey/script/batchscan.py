@@ -448,16 +448,15 @@ if args.duplex == "manual":
                     )
                     if DEBUG:
                         traceback.print_exc(file=sys.stdout)
-      
+
             if len(filestopdftk) > 0:
                 scanutils.run_pdftk(
                     filestopdftk, compiled_pdf_filename, debug=DEBUG, logfile=logfile
                 )
             else:
                 scanutils.logprint("No files to compile")
-            
+
             if run_mode == "run_even":
-                
                 num_pages = len(filestopdftk) * 2
 
                 send_ntfy_notification(
@@ -469,8 +468,9 @@ if args.duplex == "manual":
                     title="Scanning done!",
                     priority="low",
                     tags="scanner, pdf",
-                    url="https://ntfy.danielvolz.org/scanner"
-                
+                    url="https://ntfy.danielvolz.org/scanner",
+                )
+
                 remove_files(args.outputdir)
 
     # close logfile
