@@ -91,7 +91,12 @@ echo "${basedir}/batchscan.py \
     --height $height \
     --width $width \
     --mode "$mode" \
-    --source "$SOURCE" "
+    --source "$SOURCE" 
+    -l 0 \
+    -t 0 \
+    -x 215 \
+    -y 287 \
+    "
 
 ${basedir}/batchscan.py \
     --outputdir ${SAVETO} \
@@ -105,3 +110,7 @@ ${basedir}/batchscan.py \
     --mode "$mode" \
     --source "$SOURCE" 
     #--dry-run \
+    -l 0 \
+    -t 0 \
+    -x 215 \
+    -y 287 \

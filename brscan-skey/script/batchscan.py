@@ -108,6 +108,46 @@ def parse_arguments():
     # requires exactly one argument, but this not set by nargs
     # it's not a dry-run by default.
     parser.add_argument("--dry-run", action="store_true", default=False)
+
+    # scanimage -l 0 -t 0 -x 215 -y 287 --resolution 300 --mode 'Black & White' > myimage.ppm
+
+    parser.add_argument(
+        "-l",
+        nargs="?",
+        action="store",
+        default="0",
+        const="0",
+        action="store",
+        default=False,
+    )
+    parser.add_argument(
+        "-t",
+        nargs="?",
+        action="store",
+        default="0",
+        const="0",
+        action="store",
+        default=False,
+    )
+    parser.add_argument(
+        "-x",
+        nargs="?",
+        action="store",
+        default="215",
+        const="215",
+        action="store",
+        default=False,
+    )
+    parser.add_argument(
+        "-y",
+        nargs="?",
+        action="store",
+        default="287",
+        const="287",
+        action="store",
+        default=False,
+    )
+
     args, unknown = parser.parse_known_args()
 
     # process options.
@@ -401,10 +441,14 @@ else:  # if not (double sided and manual double scanning) simply run single side
         args.outputdir + "/" + args.prefix + "-" + str(args.timenow) + "-part-%03d.pnm"
     )
     [out, err, processhandle] = scanutils.run_scancommand(
+        args.t,
+        args.l,
+        args.x,
+        args.y,
         args.device_name,
         outputfile,
-        # width=args.width,
-        # height=args.height,
+        width=args.width,
+        height=args.height,
         logfile=logfile,
         debug=DEBUG,
         mode=args.mode,

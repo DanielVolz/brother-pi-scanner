@@ -211,6 +211,10 @@ def oddoreven_and_maxpart_number(filesclose, debug=False):
 
 
 def run_scancommand(
+    t,
+    l,
+    x,
+    y,
     device_name,
     outputfile,
     width=None,
@@ -241,6 +245,10 @@ def run_scancommand(
     # add outputfile option
     scancommand = scancommand + ["--batch=" + outputfile]
     for op in [
+        "t",
+        "l",
+        "x",
+        "y",
         "device_name",
         "batch_start",
         "batch_increment",
