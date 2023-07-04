@@ -6,12 +6,12 @@ import argparse
 import datetime
 import os
 import re
-import subprocess
 import sys
 import tempfile
 import time
 import traceback
 
+import requests
 import scanutils
 
 # SETTINGS
@@ -34,26 +34,11 @@ def remove_files(folder_path):
 
 
 def send_ntfy_notification(username, password, message, title, priority, tags):
-    command = [
-        "curl",
-        "-u",
-        f"{username}:{password}",
-        "-d",
-        str(message),
-        "-H",
-        f"Title: {title}",
-        "-H",
-        f"Priority: {priority}",
-        "-H",
-        f"Tags: {tags}",
-        "https://ntfy.danielvolz.org/scanner",
-    ]
-
-    try:
-        subprocess.run(" ".join(command), check=True, shell=True)
-        print("Notification sent successfully!")
-    except subprocess.CalledProcessError as error:
-        print("Error occurred while sending notification:", error)
+    url = "https://ntfy.danielvolz.org/scanner"
+    headers = {"Title": f"{title}", "Priority": f"{priority}", "Tags": f"{tags}"}
+    data = message
+    response = requests.post(url, headers=headers, data=data, auth=(username, password))
+    return response.status_code
 
 
 def parse_arguments():
@@ -450,18 +435,19 @@ if args.duplex == "manual":
                 scanutils.run_pdftk(
                     filestopdftk, compiled_pdf_filename, debug=DEBUG, logfile=logfile
                 )
+                remove_files(args.outputdir)
+                num_pages = len(filestopdftk) * 2
                 send_ntfy_notification(
                     username="pi",
                     password="m5QtrF8hY",
                     message=(
-                        f"PDF document {compiled_pdf_filename} with",
-                        f" {len(filestopdftk)} pages scanned!",
+                        f"PDF document {compiled_pdf_filename} with {num_pages} pages"
                     ),
                     title="Scanning done!",
                     priority="low",
                     tags="scanner, pdf",
                 )
-                remove_files(args.outputdir)
+
             else:
                 scanutils.logprint("No files to compile")
 
