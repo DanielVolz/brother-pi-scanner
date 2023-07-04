@@ -10,8 +10,8 @@ import sys
 import tempfile
 import time
 import traceback
+from typing import List
 
-import requests
 import scanutils
 
 # SETTINGS
@@ -33,12 +33,29 @@ def remove_files(folder_path):
             os.remove(file_path)
 
 
-def send_ntfy_notification(username, password, message, title, priority, tags):
-    url = "https://ntfy.danielvolz.org/scanner"
-    headers = {"Title": f"{title}", "Priority": f"{priority}", "Tags": f"{tags}"}
-    data = message
-    response = requests.post(url, headers=headers, data=data, auth=(username, password))
-    return response.status_code
+def send_ntfy_notification(
+    username: str,
+    password: str,
+    message: str,
+    title: str,
+    priority: str,
+    tags: List[str],
+    url: str,
+):
+    # Prepare headers
+    headers = [f"Title: {title}", f"Priority: {priority}", f'Tags: {", ".join(tags)}']
+
+    # Prepare curl command
+    cmd = ["curl", "-u", f"{username}:{password}", "-d", message, "-H", *headers, url]
+
+    # Execute curl command
+    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    # Check result
+    if result.returncode == 0:
+        print("Notification sent successfully!")
+    else:
+        print(f"Failed to send notification, error: {result.stderr.decode()}")
 
 
 def parse_arguments():
@@ -446,6 +463,7 @@ if args.duplex == "manual":
                     title="Scanning done!",
                     priority="low",
                     tags="scanner, pdf",
+                    url="https://ntfy.danielvolz.org/scanner",
                 )
 
             else:
@@ -552,6 +570,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
                 title="Scanning done!",
                 priority="low",
                 tags="scanner, pdf",
+                url="https://ntfy.danielvolz.org/scanner",
             )
         else:
             scanutils.logprint("No scanned files found")
