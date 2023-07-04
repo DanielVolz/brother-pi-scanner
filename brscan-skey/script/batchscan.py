@@ -463,7 +463,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
             timestamp = int(time.time())
             date_time = (
                 datetime.datetime.fromtimestamp(timestamp)
-                .strftime("%d.%m.%Y %H:%M:%S")
+                .strftime("%d.%m.%Y_%H:%M:%S")
                 .replace(".", "-")
             )
 
