@@ -446,7 +446,10 @@ if args.duplex == "manual":
                 send_ntfy_notification(
                     username="pi",
                     password="m5QtrF8hY",
-                    message=filestopdftk,
+                    message=(
+                        f"PDF document {compiled_pdf_filename} with",
+                        f" {len(filestopdftk)} pages scanned!",
+                    ),
                     title="Scanning done!",
                     priority="low",
                     tags="scanner, pdf",
@@ -550,7 +553,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
             send_ntfy_notification(
                 username="pi",
                 password="m5QtrF8hY",
-                message=compiled_pdf_filename,
+                message=f"Single document {compiled_pdf_filename} scanned!",
                 title="Scanning done!",
                 priority="low",
                 tags="scanner, pdf",
