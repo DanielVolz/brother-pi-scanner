@@ -6,6 +6,7 @@ import argparse
 import datetime
 import os
 import re
+import subprocess
 import sys
 import tempfile
 import time
@@ -158,6 +159,22 @@ def parse_arguments():
 # SCRIPT START
 print("\n", today, " Starting ", sys.argv[0], " at", time.time())
 
+send_ntfy_botification = [
+    "curl",
+    "-u",
+    "pi:m5QtrF8hY",
+    "-d",
+    "Single document scanned successfully!",
+    "-H",
+    "Title: Scanning done!",
+    "-H",
+    "Priority: low",
+    "-H",
+    "Tags: scanner, pdf",
+    "https://ntfy.danielvolz.org/scanner",
+]
+
+
 # see if run as a script. as_script needed to parse arguments correctly.
 # I dont think this is needed anymore.
 if not re.match(r"/usr/bin/.*python.*", sys.argv[0]):
@@ -174,25 +191,30 @@ if DEBUG:
 
 # Open logfile
 logfile_name = args.logdir + "/batchscan.log"
+logfile = None
+
 try:
     logfile = open(logfile_name, "a")
-    logfile.write("Opening logfile.")
-except:
-    scanutils.logprint("Error opening or writing to logile", logfile_name)
+    logfile.write("Opening logfile.\n")
+except IOError as e:
+    scanutils.logprint("Error opening or writing to logfile: " + str(e), logfile_name)
+
     try:
         logfile = tempfile.NamedTemporaryFile(dir="/tmp", delete=False)
-        scanutils.logprint("Opened temporary logfile", logfile)
-    except:
-        scanutils.logprint("You cannot open a temporary file? You are so screwed.")
-        # set logfile to stdout
+        scanutils.logprint("Opened temporary logfile: " + logfile.name)
+    except FileNotFoundError:
+        scanutils.logprint("Failed to open a temporary file. You are so screwed.")
+
+        # Set logfile to stdout
         logfile = sys.stdout
 
     if DEBUG:
         traceback.print_exc(file=sys.stdout)
 
 scanutils.logfile = logfile
+
 if DEBUG:
-    scanutils.logprint("The logfile is = ", logfile)
+    scanutils.logprint("The logfile is = " + str(logfile))
 
 # set filename matchstring regular expressions
 match_string_time = (
@@ -403,6 +425,11 @@ if args.duplex == "manual":
                 scanutils.run_pdftk(
                     filestopdftk, compiled_pdf_filename, debug=DEBUG, logfile=logfile
                 )
+
+                try:
+                    subprocess.run(send_ntfy_botification, check=True)
+                except subprocess.CalledProcessError as e:
+                    print(f"An error occurred: {e}")
             else:
                 scanutils.logprint("No files to compile")
 
@@ -446,13 +473,13 @@ else:  # if not (double sided and manual double scanning) simply run single side
     if not args.dry_run:
         # find list of scanned files.
         try:
-            dirname = args.outputdir
+            dirname = args.output_dir
             matchregex = args.prefix + "-" + str(args.timenow) + r"-part-.*\.pnm"
             scanned_files = scanutils.filelist(dirname, matchregex)
 
             if DEBUG:
-                scanutils.logprint("Scanned files: ", scanned_files)
-        except:
+                scanutils.logprint("Scanned files:", scanned_files)
+        except FileNotFoundError:
             scanutils.logprint(
                 "Error finding scanned files; probably no scanned files found. Check"
                 " permissions and/or pathname."
@@ -505,5 +532,9 @@ else:  # if not (double sided and manual double scanning) simply run single side
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
 
+            try:
+                subprocess.run(send_ntfy_botification, check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred: {e}")
         else:
             scanutils.logprint("No scanned files found")
