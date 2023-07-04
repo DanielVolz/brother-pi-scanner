@@ -12,8 +12,8 @@ device=$1
 resolution=300
 
 # leave height and width uncommented to autodetect
-height=210
-width=297
+height=297
+width=210
 
 compress_format="png"
 
@@ -53,7 +53,6 @@ if [[ -z $LOGDIR ]]; then
     # if LOGDIR is not set, choose a default
     mkdir -p "${HOME}"/brscan
     logfile=${HOME}"/brscan/$scriptname.log"
-    # logfile=${HOME}"/brscan/$(date +%Y-%m-%d-%H-%M-%S)_photo_scan.log"
 else
     mkdir -p "$LOGDIR"
     logfile=${LOGDIR}"/$scriptname.log"
@@ -64,9 +63,8 @@ touch "${logfile}"
 if [[ -z $SOURCE ]]; then
     SOURCE="Automatic Document Feeder(left aligned)"
 fi
+
 # for debugging purposes, output arguments
-
-
 {
   echo "options after processing."
   echo "$*"
@@ -82,7 +80,6 @@ else
 fi
 
 # in scantofile the widht and height are automatically set. Here, they're not.
-
 if [ "$(which usleep  2>/dev/null)" != '' ];then
     usleep 100000
 else
@@ -119,11 +116,13 @@ if [ -s "$output_file" ]; then
 
     # Should convert to jpg and delete duplicates
     output_file_compressed=$(dirname "$output_file")"/$(basename "$output_file" .pnm).$compress_format"
+
     echo name output png = "$output_file_compressed"
     echo convert -trim -bordercolor White -border 20x10 +repage -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" 
     echo convert -trim -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" >> "$logfile"
     
     echo convert -trim -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" | bash
+    
     mv "$output_file_compressed" "$SAVETO"
     rm "$output_file"
     curl \
