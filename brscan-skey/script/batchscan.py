@@ -43,7 +43,7 @@ def send_ntfy_notification(username, password, message, title, priority, tags):
     ]
 
     try:
-        subprocess.run(command, check=True)
+        subprocess.run(" ".join(command), check=True, shell=True)
         print("Notification sent successfully!")
     except subprocess.CalledProcessError as error:
         print("Error occurred while sending notification:", error)
@@ -406,7 +406,7 @@ if args.duplex == "manual":
                 if len(oddfiles) == len(converted_files):
                     allfiles = scanutils.interleave_lists(oddfiles, converted_files)
                 else:
-                    logprint(
+                    scanutils.logprint(
                         "Number of even files scanned not equal to odd files scanned."
                         " Compiling even files alone."
                     )
@@ -425,14 +425,7 @@ if args.duplex == "manual":
                 # args.outputdir = "/scans"
                 # ensures that the filename for compiled pdf is unique
                 compiled_pdf_filename = (
-                    args.exportdir
-                    + "/"
-                    + args.prefix
-                    + "-"
-                    + today
-                    + "-"
-                    + date_time
-                    + ".pdf"
+                    args.exportdir + "/" + args.prefix + "-" + date_time + ".pdf"
                 )
                 filestopdftk = allfiles
 
@@ -547,14 +540,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
 
             # make a filelist and output filename to pdftk
             compiled_pdf_filename = (
-                args.exportdir
-                + "/"
-                + args.prefix
-                + "-"
-                + today
-                + "-"
-                + date_time
-                + ".pdf"
+                args.exportdir + "/" + args.prefix + "-" + date_time + ".pdf"
             )
             # compiled_pdf_filename = "/scans/new_pdf.pdf"
             scanutils.run_pdftk(
