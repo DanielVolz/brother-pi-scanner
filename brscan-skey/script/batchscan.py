@@ -257,6 +257,10 @@ if args.duplex == "manual":
         scanutils.logprint("Scanning odd pages")
 
         [out, err, processhandle] = scanutils.run_scancommand(
+            args.t,
+            args.l,
+            args.x,
+            args.y,
             args.device_name,
             outputfile,
             width=args.width,
@@ -275,6 +279,10 @@ if args.duplex == "manual":
         scanutils.logprint("Scanning even pages")
 
         [out, err, processhandle] = scanutils.run_scancommand(
+            args.t,
+            args.l,
+            args.x,
+            args.y,
             args.device_name,
             outputfile,
             width=args.width,
