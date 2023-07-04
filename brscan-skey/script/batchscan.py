@@ -117,7 +117,6 @@ def parse_arguments():
         action="store",
         default="0",
         const="0",
-        action="store",
         default=False,
     )
     parser.add_argument(
@@ -126,7 +125,6 @@ def parse_arguments():
         action="store",
         default="0",
         const="0",
-        action="store",
         default=False,
     )
     parser.add_argument(
@@ -135,7 +133,6 @@ def parse_arguments():
         action="store",
         default="215",
         const="215",
-        action="store",
         default=False,
     )
     parser.add_argument(
@@ -144,7 +141,6 @@ def parse_arguments():
         action="store",
         default="287",
         const="287",
-        action="store",
         default=False,
     )
 

@@ -91,7 +91,7 @@ echo "${basedir}/batchscan.py \
     --height $height \
     --width $width \
     --mode "$mode" \
-    --source "$SOURCE" 
+    --source "$SOURCE" \
     -l 0 \
     -t 0 \
     -x 215 \
@@ -108,7 +108,7 @@ ${basedir}/batchscan.py \
     --height $height \
     --width $width \
     --mode "$mode" \
-    --source "$SOURCE" 
+    --source "$SOURCE" \
     #--dry-run \
     -l 0 \
     -t 0 \
