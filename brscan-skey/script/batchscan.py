@@ -337,6 +337,7 @@ if args.duplex == "manual":
             if not err and len(converted_files) == len(scanned_files):
                 for f in scanned_files:
                     os.remove(f)
+                    scanutils.logprint("removing file:" + f)
 
             # make a filelist and output filename for pdftk
             if run_mode == "run_odd":
@@ -375,6 +376,8 @@ if args.duplex == "manual":
 
                 if DEBUG:
                     scanutils.logprint("filelist: ", allfiles)
+
+                args.outputdir = "/scans"
                 # ensures that the filename for compiled pdf is unique
                 compiled_pdf_filename = (
                     args.outputdir

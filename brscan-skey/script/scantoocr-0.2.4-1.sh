@@ -24,8 +24,10 @@ fi
 
 # the width is default and i wont use it. It's in mm and equal to 8.5in
 width=215.88
+
 # the height has to be set. its now 11in = 279.4 and 11.4in = 290. Setting the height higher does not work on the ADF, but does work on the flatbet
 height=279.4
+
 mode="Black & White"
 
 epochnow=$(date '+%s')
@@ -49,7 +51,8 @@ if [[ -r "$cfgfile" ]]; then
     env
 fi
 
-# TMP_SAVETO=${HOME}'/brscan/ocr'
+TMP_SAVETO=${HOME}'/brscan/ocr'
+mkdir -p $TMP_SAVETO
 
 SAVETO=${SAVETO}'/ocr'
 
@@ -69,13 +72,13 @@ mkdir -p $SAVETO
 
 if [[ -z $LOGDIR ]]; then
     # if LOGDIR is not set, choose a default
-    mkdir -p ${HOME}/brscan
-    logfile=${HOME}"/brscan/$(date +%Y-%m-%d-%H-%M-%S)_ocr_scan.log"
+    mkdir -p "${HOME}"/brscan
+    logfile=${HOME}"/brscan/$scriptname.log"
 else
-    mkdir -p $LOGDIR
-    logfile=${LOGDIR}"/$(date +%Y-%m-%d-%H-%M-%S)_ocr_scan.log"
+    mkdir -p "$LOGDIR"
+    logfile=${LOGDIR}"/$scriptname.log"
 fi
-touch ${logfile}
+touch "${logfile}"
 
 # if DUPLEXTYPE is not set
 if [[ -z $DUPLEXTYPE ]]; then
@@ -96,7 +99,7 @@ echo $LOGDIR >> ${logfile}
 
 fileprefix='scantoocr'
 echo "${basedir}/batchscan.py \
-    --outputdir ${SAVETO} \
+    --outputdir ${TMP_SAVETO} \
     --logdir ${LOGDIR} \
     --prefix ${fileprefix} \
     --timenow ${epochnow} \
@@ -109,7 +112,7 @@ echo "${basedir}/batchscan.py \
     --duplex "$DUPLEXTYPE" " 
 
 ${basedir}/batchscan.py \
-    --outputdir ${SAVETO} \
+    --outputdir ${TMP_SAVETO} \
     --logdir ${LOGDIR} \
     --prefix ${fileprefix} \
     --timenow ${epochnow} \
