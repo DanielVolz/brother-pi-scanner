@@ -259,7 +259,10 @@ def run_scancommand(
         # if option is not False or None
         if eval(op):
             # this relies on the option variable name matching the scancommand option name
-            scancommand = scancommand + ["--" + op.replace("_", "-"), eval(op)]
+            if op in ["t", "l", "x", "y"]:
+                scancommand = scancommand + ["-" + op, eval(op)]
+            else:
+                scancommand = scancommand + ["--" + op.replace("_", "-"), eval(op)]
 
     if logfile == None:
         # could also be set in the default options in the function definition, but does not seem to work at the moment. not fully tested.
