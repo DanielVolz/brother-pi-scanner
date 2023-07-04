@@ -4,10 +4,8 @@
 
 import argparse
 import datetime
-import logging
 import os
 import re
-import subprocess
 import sys
 import tempfile
 import time
@@ -16,14 +14,14 @@ import traceback
 import scanutils
 
 # SETTINGS
-part = "part"
-timeoffset = 5 * 60  # in seconds
-as_script = False
-debug = True
-scanutils.debug = debug
+PART = "part"
+TIMEOFFSET = 5 * 60  # in seconds
+AS_SCRIPT = False
+DEBUG = True
+WAITLIMIT = 300  # a limit for waiting to fix errors
+scanutils.debug = DEBUG
 default_logdir = os.path.join("/tmp", "brscan")
 default_outdir = os.path.join("/tmp", "brscan")
-waitlimit = 300  # a limit for waiting to fix errors
 today = datetime.date.today().isoformat()
 
 
@@ -114,7 +112,7 @@ def parse_arguments():
 
     # process options.
     if not args.device_name:
-        if debug:
+        if DEBUG:
             scanutils.logprint(
                 "No device name set. Trying to automatically find default device"
             )
@@ -122,7 +120,7 @@ def parse_arguments():
 
     # check logdir and outputdir, and then normalize the paths
     if not os.path.exists(args.logdir):
-        if debug:
+        if DEBUG:
             scanutils.logprint(
                 "Log directory ", args.logdir, " does not exist. Creating."
             )
@@ -131,7 +129,7 @@ def parse_arguments():
     args.logdir = os.path.normpath(args.logdir)
 
     if not os.path.exists(args.outputdir):
-        if debug:
+        if DEBUG:
             scanutils.logprint(
                 "Output directory ", args.outputdir, " does not exist. Creating."
             )
@@ -154,13 +152,13 @@ print("\n", today, " Starting ", sys.argv[0], " at", time.time())
 # see if run as a script. as_script needed to parse arguments correctly.
 # I dont think this is needed anymore.
 if not re.match(r"/usr/bin/.*python.*", sys.argv[0]):
-    as_script = True
+    AS_SCRIPT = True
 
 # read arguments
 args = parse_arguments()
 
 # if debug, logprint parsed arguments
-if debug:
+if DEBUG:
     # the logfile is not set yet
     print("parsed arguments:", args)
 
@@ -180,25 +178,25 @@ except:
         # set logfile to stdout
         logfile = sys.stdout
 
-    if debug:
+    if DEBUG:
         traceback.print_exc(file=sys.stdout)
 
 scanutils.logfile = logfile
-if debug:
+if DEBUG:
     scanutils.logprint("The logfile is = ", logfile)
 
 # set filename matchstring regular expressions
 match_string_time = (
-    args.outputdir + "/" + args.prefix + "-([0-9]+)-" + part + r"-[0-9]+\..*"
+    args.outputdir + "/" + args.prefix + "-([0-9]+)-" + PART + r"-[0-9]+\..*"
 )
 match_string_part = (
-    args.outputdir + "/" + args.prefix + "-[0-9]+-" + part + r"-([0-9]+)\..*"
+    args.outputdir + "/" + args.prefix + "-[0-9]+-" + PART + r"-([0-9]+)\..*"
 )
 
 # list of odd files
 odd_files_name = args.outputdir + "/" + "." + args.prefix + "-odd-filelist"
 
-if debug:
+if DEBUG:
     scanutils.logprint(
         "Look for scanned files of the following form (regex): ", match_string_part
     )
@@ -212,7 +210,7 @@ if args.duplex == "manual":
     if os.path.exists(odd_files_name):
         odd_files_list = eval(open(odd_files_name).read())
         scanutils.logprint("Found odd files list")
-        if debug:
+        if DEBUG:
             scanutils.logprint("They are:", odd_files_list)
 
         # can be overridden below if checks are failed.
@@ -256,7 +254,7 @@ if args.duplex == "manual":
             width=args.width,
             height=args.height,
             logfile=logfile,
-            debug=debug,
+            debug=DEBUG,
             mode=args.mode,
             resolution=args.resolution,
             batch=True,
@@ -274,7 +272,7 @@ if args.duplex == "manual":
             width=args.width,
             height=args.height,
             logfile=logfile,
-            debug=debug,
+            debug=DEBUG,
             mode=args.mode,
             resolution=args.resolution,
             batch=True,
@@ -295,27 +293,27 @@ if args.duplex == "manual":
             matchregex = args.prefix + "-" + str(args.timenow) + r"-part-.*\.pnm"
             scanned_files = scanutils.filelist(dirname, matchregex)
 
-            if debug:
+            if DEBUG:
                 scanutils.logprint("Scanned files: ", scanned_files)
         except:
             scanutils.logprint(
                 "Error finding scanned files; probably no scanned files found. Check"
                 " permissions and/or pathname."
             )
-            if debug:
+            if DEBUG:
                 traceback.print_exc(file=sys.stdout)
 
         # find number of scanned files
         # originally, I found the number of scanned files by looking at the maximum file part number. I don't see why I have to do that. In manual duplex scan mode, this also allows you to delete pages from the odd scanned pages list if necessary.
         number_scanned = len(scanned_files)
 
-        if debug:
+        if DEBUG:
             scanutils.logprint("number_scanned: " + str(number_scanned))
 
         if number_scanned > 0:
             # waiting is builtin to convert_to_pdf, but ideally you should pass the process handle back and you wait in the main script.
             err, converted_files = scanutils.convert_to_pdf(
-                scanned_files, wait=0, debug=debug, logfile=logfile
+                scanned_files, wait=0, debug=DEBUG, logfile=logfile
             )
 
             # delete original scanned files
@@ -358,7 +356,7 @@ if args.duplex == "manual":
                     )
                     allfiles = converted_files
 
-                if debug:
+                if DEBUG:
                     scanutils.logprint("filelist: ", allfiles)
                 # ensures that the filename for compiled pdf is unique
                 compiled_pdf_filename = (
@@ -378,12 +376,12 @@ if args.duplex == "manual":
                     os.remove(odd_files_name)
                 except:
                     logprint("Error deleting odd files list!!! Must manually delete")
-                    if debug:
+                    if DEBUG:
                         traceback.print_exc(file=sys.stdout)
 
             if len(filestopdftk) > 0:
                 scanutils.run_pdftk(
-                    filestopdftk, compiled_pdf_filename, debug=debug, logfile=logfile
+                    filestopdftk, compiled_pdf_filename, debug=DEBUG, logfile=logfile
                 )
             else:
                 scanutils.logprint("No files to compile")
@@ -408,7 +406,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
         # width=args.width,
         # height=args.height,
         logfile=logfile,
-        debug=debug,
+        debug=DEBUG,
         mode=args.mode,
         resolution=args.resolution,
         batch_start="1",
@@ -428,27 +426,27 @@ else:  # if not (double sided and manual double scanning) simply run single side
             matchregex = args.prefix + "-" + str(args.timenow) + r"-part-.*\.pnm"
             scanned_files = scanutils.filelist(dirname, matchregex)
 
-            if debug:
+            if DEBUG:
                 scanutils.logprint("Scanned files: ", scanned_files)
         except:
             scanutils.logprint(
                 "Error finding scanned files; probably no scanned files found. Check"
                 " permissions and/or pathname."
             )
-            if debug:
+            if DEBUG:
                 traceback.print_exc(file=sys.stdout)
 
         # find number of scanned files
         # originally, I found the number of scanned files by looking at the maximum file part number. I don't see why I have to do that. In manual duplex scan mode, this also allows you to delete pages from the odd scanned pages list if necessary.
         number_scanned = len(scanned_files)
 
-        if debug:
+        if DEBUG:
             scanutils.logprint("number_scanned: " + str(number_scanned))
 
         if number_scanned > 0:
             # waiting is builtin to convert_to_pdf, but ideally you should pass the process handle back and you wait in the main script.
             err, converted_files = scanutils.convert_to_pdf(
-                scanned_files, wait=0, debug=debug, logfile=logfile
+                scanned_files, wait=0, debug=DEBUG, logfile=logfile
             )
 
             # delete original scanned files
@@ -480,7 +478,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
             )
             # compiled_pdf_filename = "/scans/new_pdf.pdf"
             scanutils.run_pdftk(
-                converted_files, compiled_pdf_filename, debug=debug, logfile=logfile
+                converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
 
         else:
