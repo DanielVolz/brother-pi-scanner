@@ -26,6 +26,13 @@ default_outdir = os.path.join("/tmp", "brscan")
 today = datetime.date.today().isoformat()
 
 
+def remove_files(folder_path):
+    for file_name in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file_name)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+
 def send_ntfy_notification(username, password, message, title, priority, tags):
     command = [
         "curl",
@@ -454,7 +461,7 @@ if args.duplex == "manual":
                     priority="low",
                     tags="scanner, pdf",
                 )
-
+                remove_files(args.outputdir)
             else:
                 scanutils.logprint("No files to compile")
 
@@ -528,6 +535,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
             # delete original scanned files
             if not err and len(converted_files) == len(scanned_files):
                 for f in scanned_files:
+                    scanutils.logprint("file removed: " + str(f))
                     os.remove(f)
 
             # find newly converted files
@@ -545,10 +553,11 @@ else:  # if not (double sided and manual double scanning) simply run single side
             compiled_pdf_filename = (
                 args.exportdir + "/" + args.prefix + "-" + date_time + ".pdf"
             )
-            # compiled_pdf_filename = "/scans/new_pdf.pdf"
             scanutils.run_pdftk(
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
+
+            remove_files(args.outputdir)
 
             send_ntfy_notification(
                 username="pi",
