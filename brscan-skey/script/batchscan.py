@@ -385,7 +385,7 @@ if args.duplex == "manual":
             if not err and len(converted_files) == len(scanned_files):
                 for f in scanned_files:
                     os.remove(f)
-                    scanutils.logprint("removing file:" + f)
+                    scanutils.logprint("removing original scanned file: " + f)
 
             # make a filelist and output filename for pdftk
             if run_mode == "run_odd":
@@ -459,19 +459,6 @@ if args.duplex == "manual":
     # close logfile
     logfile.close()
 
-num_pages = len(filestopdftk) * 2
-
-send_ntfy_notification(
-    username="pi",
-    password="m5QtrF8hY",
-    message=(
-        f"PDF document {compiled_pdf_filename} with {num_pages} pages"
-    ),
-    title="Scanning done!",
-    priority="low",
-    tags="scanner, pdf",
-    url="https://ntfy.danielvolz.org/scanner",
-)
 
 else:  # if not (double sided and manual double scanning) simply run single sided scanning routine
     # in case we have args.duplex and args.duplextype = 'manual'
@@ -561,7 +548,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
 
-            #remove_files(args.outputdir)
+            # remove_files(args.outputdir)
 
             send_ntfy_notification(
                 username="pi",
