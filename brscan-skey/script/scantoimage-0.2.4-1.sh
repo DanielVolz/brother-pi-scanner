@@ -12,8 +12,8 @@ device=$1
 resolution=300
 
 # leave height and width uncommented to autodetect
-#height=114
-#width=160
+height=210
+width=297
 
 compress_format="png"
 
