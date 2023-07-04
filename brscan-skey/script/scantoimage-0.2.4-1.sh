@@ -6,7 +6,10 @@ set +o noclobber
 #
 # query device with scanimage -h to get allowed resolutions
 
-device=$1
+if [ -n "$1" ]; then
+    # if first argument is not empty
+    device=$1
+fi
 
 # in color resolution more than 300 slows things down
 resolution=300

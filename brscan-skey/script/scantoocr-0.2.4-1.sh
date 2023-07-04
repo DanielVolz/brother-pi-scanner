@@ -15,18 +15,17 @@ set +o noclobber
 #   ~~Apr 01 2016 To do, implement compression if possible.~~
 #   ~~Dec 31 2016 to do, combine even and odd files into one big pdf file~~
 
-resolution=300
-
 if [ -n "$1" ]; then
     # if first argument is not empty
     device=$1
 fi
 
-# the width is default and i wont use it. It's in mm and equal to 8.5in
-width=215.88
+resolution=300
 
 # the height has to be set. its now 11in = 279.4 and 11.4in = 290. Setting the height higher does not work on the ADF, but does work on the flatbet
-height=279.4
+height=297
+# the width is default and i wont use it. It's in mm and equal to 8.5in
+width=210
 
 mode="Black & White"
 
@@ -38,7 +37,7 @@ scriptname=$(basename "$0")
 basedir=$(readlink -f "$0" | xargs dirname)
 
 # change to directory of script
-cd ${basedir}
+cd "${basedir}" || exit
 echo "basedir = $basedir" 
 
 # ugly hack that makes environment variables set available
@@ -52,12 +51,6 @@ if [[ -r "$cfgfile" ]]; then
 fi
 
 TMP_SAVETO=${HOME}'/brscan/ocr'
-mkdir -p $TMP_SAVETO
-
-SAVETO=${SAVETO}'/ocr'
-
-
-mkdir -p $SAVETO
 # mkdir -p $TMP_SAVETO
 
 
@@ -91,11 +84,12 @@ if [[ -z $DUPLEXSOURCE ]]; then
 fi
 
 # for debugging purposes, output arguments
-echo "options after processing." >> ${logfile}
-echo "$*" >> ${logfile}
-# export environment to logfile
-set >> ${logfile}
-echo $LOGDIR >> ${logfile}
+{
+  echo "options after processing."
+  echo "$*"
+  set
+  echo "$LOGDIR"
+} >> "${logfile}"
 
 fileprefix='scantoocr'
 echo "${basedir}/batchscan.py \
@@ -105,23 +99,24 @@ echo "${basedir}/batchscan.py \
     --timenow ${epochnow} \
     --device-name ${device} \
     --resolution ${resolution} \
-    --height $height \
-    --width $width \
-    --mode "$mode" \
-    --source "$DUPLEXSOURCE" \
-    --duplex "$DUPLEXTYPE" " 
+    --height ${height} \
+    --width ${width} \
+    --mode "${mode}" \
+    --source "${DUPLEXSOURCE}" \
+    --duplex "${DUPLEXTYPE}"  \
+    --exportdir "${SAVETO}"
+    " 
 
-${basedir}/batchscan.py \
-    --outputdir ${TMP_SAVETO} \
-    --logdir ${LOGDIR} \
+"${basedir}/batchscan.py" \
+    --outputdir "${TMP_SAVETO}" \
+    --logdir "${LOGDIR}" \
     --prefix ${fileprefix} \
-    --timenow ${epochnow} \
-    --device-name ${device} \
+    --timenow "${epochnow}" \
+    --device-name "${device}" \
     --resolution ${resolution} \
-    --height $height \
-    --width $width \
-    --mode "$mode" \
-    --source "$DUPLEXSOURCE" \
-    --duplex "$DUPLEXTYPE" 
-    #--dry-run \
-
+    --height ${height} \
+    --width ${width} \
+    --mode "${mode}" \
+    --source "${DUPLEXSOURCE}" \
+    --duplex "${DUPLEXTYPE}" \
+    --exportdir "${SAVETO}"

@@ -26,6 +26,29 @@ default_outdir = os.path.join("/tmp", "brscan")
 today = datetime.date.today().isoformat()
 
 
+def send_ntfy_notification(username, password, message, title, priority, tags):
+    command = [
+        "curl",
+        "-u",
+        f"{username}:{password}",
+        "-d",
+        message,
+        "-H",
+        f"Title: {title}",
+        "-H",
+        f"Priority: {priority}",
+        "-H",
+        f"Tags: {tags}",
+        "https://ntfy.danielvolz.org/scanner",
+    ]
+
+    try:
+        subprocess.run(command, check=True)
+        print("Notification sent successfully!")
+    except subprocess.CalledProcessError as error:
+        print("Error occurred while sending notification:", error)
+
+
 def parse_arguments():
     global default_outdir, default_logdir
 
@@ -40,7 +63,15 @@ def parse_arguments():
         action="store",
         default=default_outdir,
         const=default_outdir,
-        help="output directory for scanned files",
+        help="tmp output directory for scanned files",
+    )
+    parser.add_argument(
+        "--exportdir",
+        nargs="?",
+        action="store",
+        default="/scans",
+        const=default_outdir,
+        help="docker mounted output directory for scanned files",
     )
     parser.add_argument(
         "--logdir",
@@ -158,21 +189,6 @@ def parse_arguments():
 
 # SCRIPT START
 print("\n", today, " Starting ", sys.argv[0], " at", time.time())
-
-send_ntfy_botification = [
-    "curl",
-    "-u",
-    "pi:m5QtrF8hY",
-    "-d",
-    "Single document scanned successfully!",
-    "-H",
-    "Title: Scanning done!",
-    "-H",
-    "Priority: low",
-    "-H",
-    "Tags: scanner, pdf",
-    "https://ntfy.danielvolz.org/scanner",
-]
 
 
 # see if run as a script. as_script needed to parse arguments correctly.
@@ -334,7 +350,7 @@ if args.duplex == "manual":
 
             if DEBUG:
                 scanutils.logprint("Scanned files: ", scanned_files)
-        except:
+        except FileNotFoundError:
             scanutils.logprint(
                 "Error finding scanned files; probably no scanned files found. Check"
                 " permissions and/or pathname."
@@ -399,16 +415,23 @@ if args.duplex == "manual":
                 if DEBUG:
                     scanutils.logprint("filelist: ", allfiles)
 
-                args.outputdir = "/scans"
+                timestamp = int(time.time())
+                date_time = (
+                    datetime.datetime.fromtimestamp(timestamp)
+                    .strftime("%d.%m.%Y_%H:%M:%S")
+                    .replace(".", "-")
+                )
+
+                # args.outputdir = "/scans"
                 # ensures that the filename for compiled pdf is unique
                 compiled_pdf_filename = (
-                    args.outputdir
+                    args.exportdir
                     + "/"
                     + args.prefix
                     + "-"
                     + today
                     + "-"
-                    + str(int(time.time()))
+                    + date_time
                     + ".pdf"
                 )
                 filestopdftk = allfiles
@@ -416,8 +439,10 @@ if args.duplex == "manual":
                 # finally delete even files list
                 try:
                     os.remove(odd_files_name)
-                except:
-                    logprint("Error deleting odd files list!!! Must manually delete")
+                except FileNotFoundError:
+                    scanutils.logprint(
+                        "Error deleting odd files list!!! Must manually delete"
+                    )
                     if DEBUG:
                         traceback.print_exc(file=sys.stdout)
 
@@ -425,11 +450,15 @@ if args.duplex == "manual":
                 scanutils.run_pdftk(
                     filestopdftk, compiled_pdf_filename, debug=DEBUG, logfile=logfile
                 )
+                send_ntfy_notification(
+                    username="pi",
+                    password="m5QtrF8hY",
+                    message=filestopdftk,
+                    title="Scanning done!",
+                    priority="low",
+                    tags="scanner, pdf",
+                )
 
-                try:
-                    subprocess.run(send_ntfy_botification, check=True)
-                except subprocess.CalledProcessError as e:
-                    print(f"An error occurred: {e}")
             else:
                 scanutils.logprint("No files to compile")
 
@@ -507,7 +536,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
 
             # find newly converted files
             # convertedfiles = filelist('ls ' + args.outputdir + '/' + args.prefix + '-' + str(int(args.timenow)) + '-part-*.pdf')
-            args.outputdir = "/scans"
+            # args.outputdir = "/scans"
 
             timestamp = int(time.time())
             date_time = (
@@ -518,7 +547,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
 
             # make a filelist and output filename to pdftk
             compiled_pdf_filename = (
-                args.outputdir
+                args.exportdir
                 + "/"
                 + args.prefix
                 + "-"
@@ -532,9 +561,13 @@ else:  # if not (double sided and manual double scanning) simply run single side
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
 
-            try:
-                subprocess.run(send_ntfy_botification, check=True)
-            except subprocess.CalledProcessError as e:
-                print(f"An error occurred: {e}")
+            send_ntfy_notification(
+                username="pi",
+                password="m5QtrF8hY",
+                message=compiled_pdf_filename,
+                title="Scanning done!",
+                priority="low",
+                tags="scanner, pdf",
+            )
         else:
             scanutils.logprint("No scanned files found")
