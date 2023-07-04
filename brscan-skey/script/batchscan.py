@@ -457,13 +457,14 @@ if args.duplex == "manual":
                 scanutils.logprint("No files to compile")
 
             if run_mode == "run_even":
-                num_pages = len(filestopdftk) * 2
+                num_pages = len(filestopdftk)
 
                 send_ntfy_notification(
                     username="pi",
                     password="m5QtrF8hY",
                     message=(
-                        f"PDF document {compiled_pdf_filename} with {num_pages} pages"
+                        f'PDF document "{compiled_pdf_filename}" with {num_pages} pages'
+                        " scanned successfully!"
                     ),
                     title="Scanning done!",
                     priority="low",
