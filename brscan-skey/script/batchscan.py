@@ -98,6 +98,12 @@ def parse_arguments():
         const="210",
         help="scanned page width. similar to letter paper in mm",
     )
+
+    parser.add_argument("--l", nargs="?", action="store", default="0", const="0")
+    parser.add_argument("--t", nargs="?", action="store", default="0", const="0")
+    parser.add_argument("--x", nargs="?", action="store", default="215", const="215")
+    parser.add_argument("--y", nargs="?", action="store", default="287", const="287")
+
     parser.add_argument("--mode", nargs="?", action="store", default=None, const=None)
     # parser.add_argument('--mode',action='store',default = 'Black & White')
     parser.add_argument("--source", nargs="?", action="store", default=None, const=None)
@@ -110,11 +116,6 @@ def parse_arguments():
     parser.add_argument("--dry-run", action="store_true", default=False)
 
     # scanimage -l 0 -t 0 -x 215 -y 287 --resolution 300 --mode 'Black & White' > myimage.ppm
-
-    parser.add_argument("--l", nargs="?", action="store", default="0", const="0")
-    parser.add_argument("--t", nargs="?", action="store", default="0", const="0")
-    parser.add_argument("--x", nargs="?", action="store", default="215", const="215")
-    parser.add_argument("--y", nargs="?", action="store", default="287", const="287")
 
     args, unknown = parser.parse_known_args()
 

@@ -92,25 +92,26 @@ echo "${basedir}/batchscan.py \
     --width $width \
     --mode "$mode" \
     --source "$SOURCE" \
-    -l 0 \
-    -t 0 \
-    -x 215 \
-    -y 287 \
-    "
-
-${basedir}/batchscan.py \
-    --outputdir ${SAVETO} \
-    --logdir ${LOGDIR} \
-    --prefix ${fileprefix} \
-    --timenow ${epochnow} \
-    --device-name ${device} \
-    --resolution ${resolution} \
-    --height $height \
-    --width $width \
-    --mode "$mode" \
-    --source "$SOURCE" \
-    #--dry-run \
     --l 0 \
     --t 0 \
     --x 215 \
     --y 287 \
+    "
+
+"${basedir}/batchscan.py" \
+    --outputdir "${SAVETO}" \
+    --logdir "${LOGDIR}" \
+    --prefix "${fileprefix}" \
+    --timenow "${epochnow}" \
+    --device-name "${device}" \
+    --resolution "${resolution}" \
+    --height "${height}" \
+    --width "${width}" \
+    --mode "${mode}" \
+    --source "${SOURCE}" \
+    --l 0 \
+    --t 0 \
+    --x 215 \
+    --y 287 \
+    # --dry-run \
+
