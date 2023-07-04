@@ -40,7 +40,7 @@ cd ${basedir}
 echo "basedir = $basedir" 
 
 # ugly hack that makes environment variables set available
-cfgfile=$(ls ../brscan-skey-*.cfg)
+cfgfile=/opt/brother/scanner/brscan-skey/brscan-skey.config
 echo "cfgfile = $cfgfile"
 if [[ -r "$cfgfile" ]]; then
     echo "Found cfgfile"
@@ -49,23 +49,31 @@ if [[ -r "$cfgfile" ]]; then
     env
 fi
 
+# TMP_SAVETO=${HOME}'/brscan/ocr'
 
-# SAVETO DIRECTORY
-if [[ -z "$SAVETO" ]];  then
-    SAVETO=${HOME}'/brscan/documents'
-else
-    SAVETO=${SAVETO}'/documents/'
-fi
+SAVETO=${SAVETO}'/ocr'
+
 
 mkdir -p $SAVETO
+# mkdir -p $TMP_SAVETO
+
+
+# # SAVETO DIRECTORY
+# if [[ -z "$SAVETO" ]];  then
+#     SAVETO=${HOME}'/brscan/documents'
+# else
+#     SAVETO=${SAVETO}'/documents/'
+# fi
+
+# mkdir -p $SAVETO
 
 if [[ -z $LOGDIR ]]; then
     # if LOGDIR is not set, choose a default
     mkdir -p ${HOME}/brscan
-    logfile=${HOME}"/brscan/$scriptname.log"
+    logfile=${HOME}"/brscan/$(date +%Y-%m-%d-%H-%M-%S)_ocr_scan.log"
 else
     mkdir -p $LOGDIR
-    logfile=${LOGDIR}"/$scriptname.log"
+    logfile=${LOGDIR}"/$(date +%Y-%m-%d-%H-%M-%S)_ocr_scan.log"
 fi
 touch ${logfile}
 
