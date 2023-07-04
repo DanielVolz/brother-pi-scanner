@@ -111,10 +111,10 @@ def parse_arguments():
 
     # scanimage -l 0 -t 0 -x 215 -y 287 --resolution 300 --mode 'Black & White' > myimage.ppm
 
-    parser.add_argument("-l", nargs="?", action="store", default="0", const="0")
-    parser.add_argument("-t", nargs="?", action="store", default="0", const="0")
-    parser.add_argument("-x", nargs="?", action="store", default="215", const="215")
-    parser.add_argument("-y", nargs="?", action="store", default="287", const="287")
+    parser.add_argument("--l", nargs="?", action="store", default="0", const="0")
+    parser.add_argument("--t", nargs="?", action="store", default="0", const="0")
+    parser.add_argument("--x", nargs="?", action="store", default="215", const="215")
+    parser.add_argument("--y", nargs="?", action="store", default="287", const="287")
 
     args, unknown = parser.parse_known_args()
 

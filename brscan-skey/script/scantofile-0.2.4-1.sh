@@ -110,7 +110,7 @@ ${basedir}/batchscan.py \
     --mode "$mode" \
     --source "$SOURCE" \
     #--dry-run \
-    -l 0 \
-    -t 0 \
-    -x 215 \
-    -y 287 \
+    --l 0 \
+    --t 0 \
+    --x 215 \
+    --y 287 \
