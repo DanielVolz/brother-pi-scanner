@@ -84,7 +84,7 @@ fi
 
 # if DUPLEXSOURCE is not set
 if [[ -z $DUPLEXSOURCE ]]; then
-    DUPLEXSOURCE="Automatic Document Feeder(left aligned,Duplex)"
+    DUPLEXSOURCE="Automatic Document Feeder(left aligned)"
 fi
 
 # for debugging purposes, output arguments
