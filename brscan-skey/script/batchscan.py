@@ -432,13 +432,14 @@ if args.duplex == "manual":
                     .strftime("%d.%m.%Y_%H:%M:%S")
                     .replace(".", "-")
                 )
-
+                filestopdftk = allfiles
+                num_pages = len(filestopdftk)
+                
                 # args.outputdir = "/scans"
                 # ensures that the filename for compiled pdf is unique
                 compiled_pdf_filename = (
-                    args.exportdir + "/" + args.prefix + "-" + date_time + ".pdf"
+                    args.exportdir + "/" + args.prefix + "-" + date_time + "-" + num_pages + ".pdf"
                 )
-                filestopdftk = allfiles
 
                 # finally delete even files list
                 try:
@@ -458,8 +459,8 @@ if args.duplex == "manual":
                 scanutils.logprint("No files to compile")
 
             if run_mode == "run_even":
+                
                 num_pages = len(filestopdftk)
-
                 send_ntfy_notification(
                     username="pi",
                     password="m5QtrF8hY",
@@ -558,15 +559,15 @@ else:  # if not (double sided and manual double scanning) simply run single side
                 .strftime("%d.%m.%Y_%H:%M:%S")
                 .replace(".", "-")
             )
+            num_pages=len(converted_files)
 
             # make a filelist and output filename to pdftk
             compiled_pdf_filename = (
-                args.exportdir + "/" + args.prefix + "-" + date_time + ".pdf"
+                args.exportdir + "/" + args.prefix + "-" + date_time + "-" + num_pages + ".pdf"
             )
             scanutils.run_pdftk(
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
-            num_pages=len(converted_files)
             remove_files(args.outputdir)
 
             send_ntfy_notification(
