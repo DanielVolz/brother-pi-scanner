@@ -438,7 +438,7 @@ if args.duplex == "manual":
                 # args.outputdir = "/scans"
                 # ensures that the filename for compiled pdf is unique
                 compiled_pdf_filename = (
-                    args.exportdir + "/" + args.prefix + "-" + date_time + "-" + num_pages + ".pdf"
+                    args.exportdir + "/" + args.prefix + "-" + date_time + "-" + str(num_pages) + ".pdf"
                 )
 
                 # finally delete even files list
@@ -563,7 +563,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
 
             # make a filelist and output filename to pdftk
             compiled_pdf_filename = (
-                args.exportdir + "/" + args.prefix + "-" + date_time + "-" + num_pages + ".pdf"
+                args.exportdir + "/" + args.prefix + "-" + date_time + "-" + str(num_pages) + ".pdf"
             )
             scanutils.run_pdftk(
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
