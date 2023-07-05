@@ -514,7 +514,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
     if not args.dry_run:
         # find list of scanned files.
         try:
-            dirname = args.output_dir
+            dirname = args.outputdir
             matchregex = args.prefix + "-" + str(args.timenow) + r"-part-.*\.pnm"
             scanned_files = scanutils.filelist(dirname, matchregex)
 
