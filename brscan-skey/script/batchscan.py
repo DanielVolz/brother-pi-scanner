@@ -221,6 +221,7 @@ logfile = None
 
 try:
     logfile = open(logfile_name, "a")
+    scanutils.logfile = logfile
     logfile.write("Opening logfile.\n")
 except IOError as e:
     scanutils.logprint("Error opening or writing to logfile: " + str(e), logfile_name)
@@ -237,7 +238,7 @@ except IOError as e:
     if DEBUG:
         traceback.print_exc(file=sys.stdout)
 
-scanutils.logfile = logfile
+# scanutils.logfile = logfile
 
 if DEBUG:
     scanutils.logprint("The logfile is = " + str(logfile))
