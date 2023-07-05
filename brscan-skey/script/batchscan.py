@@ -465,7 +465,7 @@ if args.duplex == "manual":
                     password="m5QtrF8hY",
                     message=(
                         f'PDF document "{compiled_pdf_filename}" with {num_pages} pages'
-                        " scanned successfully!"
+                        " created successfully!"
                     ),
                     title="Scanning done!",
                     priority="low",
@@ -566,13 +566,14 @@ else:  # if not (double sided and manual double scanning) simply run single side
             scanutils.run_pdftk(
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
-
+            num_pages=len(converted_files)
             remove_files(args.outputdir)
 
             send_ntfy_notification(
                 username="pi",
                 password="m5QtrF8hY",
-                message=f"Single document {compiled_pdf_filename} scanned!",
+                message=(f'PDF document "{compiled_pdf_filename}" with {num_pages} pages'
+                        " created successfully!"),
                 title="Scanning done!",
                 priority="low",
                 tags="scanner, pdf",
