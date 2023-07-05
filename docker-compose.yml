@@ -5,7 +5,7 @@ services:
       platform: linux/amd64
       volumes:
          - /home/pi/scans:/scans
-         - /home/pi/docker/BrotherScannerDocker/brscan-skey:/opt/brother/scanner/brscan-skey
+         - ./brscan-skey:/opt/brother/scanner/brscan-skey
       environment:
          - NAME=pi-scanner
          - MODEL=MFC-5490CN
