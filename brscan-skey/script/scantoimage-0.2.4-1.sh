@@ -88,7 +88,7 @@ if [ "$(which usleep  2>/dev/null)" != '' ];then
 else
     sleep  0.1
 fi
-output_file="$TMP_SAVETO/brscan_single_$(date +%d-%m-%Y:%H:%M:%S).pnm"
+output_file="$TMP_SAVETO/brscan_single_$(date +%d-%m-%Y_%H:%M:%S).pnm"
 
 # options
 if [[ -z "$height" || -z "$width" ]]; then
