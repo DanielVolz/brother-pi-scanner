@@ -119,7 +119,7 @@ if [ -s "$output_file" ]; then
 
     # Should convert to jpg and delete duplicates
     output_file_compressed=$(dirname "$output_file")"/$(basename "$output_file" .pnm).$compress_format"
-
+    png_name = "$(basename "$output_file" .pnm)".$compress_format
     echo name output png = "$output_file_compressed"
     echo convert -trim -bordercolor White -border 20x10 +repage -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" 
     echo convert -trim -quality 95 -density "$resolution" "$output_file" "$output_file_compressed" >> "$logfile"
@@ -130,9 +130,9 @@ if [ -s "$output_file" ]; then
     rm "$output_file"
     curl \
         -u pi:m5QtrF8hY \
-        -d "Single document \"$output_file_compressed\" scanned successfully!" \
+        -d "Single document \"$png_name\" scanned successfully!" \
         -H "Title: Scanning done!" \
         -H "Priority: low" \
-        -H "Tags: scanner, pdf" \
+        -H "Tags: scanner, png" \
         https://ntfy.danielvolz.org/scanner
 fi
