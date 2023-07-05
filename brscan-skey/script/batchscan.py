@@ -544,7 +544,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
             # delete original scanned files
             if not err and len(converted_files) == len(scanned_files):
                 for f in scanned_files:
-                    scanutils.logprint("file removed: " + str(f))
+                    scanutils.logprint("scan file removed: " + str(f))
                     os.remove(f)
 
             # find newly converted files
@@ -566,7 +566,7 @@ else:  # if not (double sided and manual double scanning) simply run single side
                 converted_files, compiled_pdf_filename, debug=DEBUG, logfile=logfile
             )
 
-            # remove_files(args.outputdir)
+            remove_files(args.outputdir)
 
             send_ntfy_notification(
                 username="pi",
