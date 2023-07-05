@@ -48,7 +48,7 @@ mkdir -p "$TMP_SAVETO"
 if [[ -z "$SAVETO" ]];  then
     SAVETO=${HOME}'/brscan/single'
 else
-    SAVETO=${SAVETO}'/single'
+    # SAVETO=${SAVETO}'/single'
     mkdir -p "$SAVETO"
 fi
 
@@ -130,7 +130,7 @@ if [ -s "$output_file" ]; then
     rm "$output_file"
     curl \
         -u pi:m5QtrF8hY \
-        -d "Single document scanned successfully!" \
+        -d "Single document \"$output_file_compressed\" scanned successfully!" \
         -H "Title: Scanning done!" \
         -H "Priority: low" \
         -H "Tags: scanner, pdf" \
