@@ -1,14 +1,18 @@
-version: '3.3'
 services:
-    brother:
-      image: empty23/brother-pi-scanner:22.04
-      platform: linux/amd64
-      volumes:
-         - /home/pi/scans:/scans
-         - ./brscan-skey:/opt/brother/scanner/brscan-skey
-      environment:
-         - NAME=pi-scanner
-         - MODEL=MFC-5490CN
-         - IPADDRESS=192.168.0.172
-         - TZ=Europe/Berlin
-      network_mode: host
+  brother:
+    # image: empty23/brother-pi-scanner:22.04
+    # platform: linux/amd64
+    build: .
+    image: brother_pi_scanner:22.04
+    container_name: brother_pi_scanner
+    volumes:
+      - ~/scans:/scans
+      - ./brscan-skey:/opt/brother/scanner/brscan-skey
+    restart: unless-stopped
+    environment:
+      - NAME=pi-scanner
+      - MODEL=MFC-5490CN
+      - IPADDRESS=192.168.23.127
+      - TZ=Europe/Berlin
+    network_mode: host
+networks: {}

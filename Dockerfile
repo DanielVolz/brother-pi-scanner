@@ -20,7 +20,7 @@ ADD files/add_scanner.sh /opt/brother/add_scanner.sh
 
 ENV NAME="pi-scanner"
 ENV MODEL="MFC-5490CN"
-ENV IPADDRESS="192.168.0.172"
+ENV IPADDRESS="192.168.23.127"
 ENV USERNAME="pi-scanner"
 ENV TZ="Europe/Berlin"
 ENV DEBIAN_FRONTEND="noninteractive"
